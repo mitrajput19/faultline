@@ -220,3 +220,10 @@ Runtime dependencies are `next`, `react`, `react-dom` and `neo4j-driver`. There 
 ## Screenshots
 
 _Add screenshots of the catalogue and blast-radius views here._
+![alt text](image.png)
+
+![alt text](image-1.png)
+
+![alt text](image-2.png)
+
+![alt text](image-3.png)
