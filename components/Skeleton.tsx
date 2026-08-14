@@ -3,7 +3,7 @@ export function Skeleton({ rows = 8 }: { rows?: number }) {
     <div
       role="status"
       aria-label="Loading"
-      className="overflow-hidden rounded-soft border border-hairline bg-surface shadow-ambient"
+      className="overflow-hidden rounded-soft border border-hairline bg-surface"
     >
       {Array.from({ length: rows }).map((_, index) => (
         <div

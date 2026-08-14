@@ -80,7 +80,7 @@ export function ImpactGraph({
   );
 
   return (
-    <div className="overflow-x-auto rounded-soft border border-hairline bg-surface shadow-ambient">
+    <div className="overflow-x-auto rounded-soft border border-hairline bg-surface">
       <svg
         role="img"
         aria-label={`Dependency impact graph for ${origin.name}`}

@@ -22,11 +22,12 @@ export default async function ServicePage({
     requested >= 1 && requested <= MAX_DEPTH ? Math.floor(requested) : 2;
 
   return (
-    <div className="space-y-12">
+    <div className="bg-parchment px-5 py-10 sm:px-6 sm:py-16">
+      <div className="mx-auto max-w-7xl space-y-12">
       <div className="flex flex-wrap items-center justify-between gap-6">
         <Link
           href="/"
-          className="rounded-sharp text-caption-sm text-subtle underline decoration-hairline underline-offset-4 hover:text-ink hover:decoration-accent"
+          className="rounded-sharp text-caption-sm text-subtle underline decoration-hairline underline-offset-4 hover:text-accent hover:decoration-accent"
         >
           All services
         </Link>
@@ -39,7 +40,7 @@ export default async function ServicePage({
                 key={option}
                 href={`/services/${id}?depth=${option}`}
                 aria-current={option === activeDepth ? "true" : undefined}
-                className={`flex h-11 w-11 items-center justify-center rounded-soft border text-caption-sm font-medium transition-colors ${
+                className={`flex h-11 w-11 items-center justify-center rounded-full border text-caption-sm font-medium transition-colors ${
                   option === activeDepth
                     ? "border-accent bg-accent text-on-accent"
                     : "border-hairline bg-surface text-subtle hover:border-accent hover:text-ink"
@@ -55,6 +56,7 @@ export default async function ServicePage({
       <Suspense key={`${id}-${activeDepth}`} fallback={<Skeleton rows={6} />}>
         <BlastRadius id={id} depth={activeDepth} />
       </Suspense>
+      </div>
     </div>
   );
 }

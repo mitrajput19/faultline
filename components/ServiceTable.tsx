@@ -33,7 +33,7 @@ export async function ServiceTable({
   }
 
   return (
-    <div className="overflow-x-auto rounded-soft border border-hairline bg-surface shadow-ambient">
+    <div className="overflow-x-auto rounded-soft border border-hairline bg-surface">
       <table className="w-full border-collapse text-body-md">
         <thead>
           <tr className="border-b border-hairline text-left text-caption-sm text-subtle">
@@ -45,11 +45,11 @@ export async function ServiceTable({
         </thead>
         <tbody>
           {services.map((service) => (
-            <tr key={service.id} className="border-b border-hairline last:border-0">
+            <tr key={service.id} className="border-b border-hairline transition-colors last:border-0 hover:bg-parchment">
               <td className="px-4 py-3">
                 <Link
                   href={`/services/${service.id}`}
-                  className="rounded-sharp font-medium text-ink underline decoration-hairline underline-offset-4 hover:decoration-accent"
+                  className="rounded-sharp font-semibold text-ink underline decoration-hairline underline-offset-4 hover:text-accent hover:decoration-accent"
                 >
                   {service.name}
                 </Link>

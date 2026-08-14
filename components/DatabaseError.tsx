@@ -1,6 +1,6 @@
 export function DatabaseError({ detail }: { detail: string }) {
   return (
-    <div className="rounded-soft border border-hairline border-l-2 border-l-critical bg-surface p-8 shadow-ambient">
+    <div className="rounded-soft border border-hairline border-l-2 border-l-critical bg-surface p-8">
       <h2 className="text-heading-md font-bold text-critical">
         Cannot reach the graph database
       </h2>

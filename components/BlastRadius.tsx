@@ -51,27 +51,27 @@ export async function BlastRadius({
 
   return (
     <div className="space-y-16">
-      <section className="border-b border-hairline pb-12">
+      <section className="rounded-soft bg-surface-dark px-6 py-12 text-white sm:px-10 sm:py-16">
         <div className="flex flex-wrap items-center gap-4">
-          <h1 className="text-display-sm font-bold">{origin.name}</h1>
+          <h1 className="text-display-sm font-semibold">{origin.name}</h1>
           <TierBadge tier={origin.tier} />
         </div>
-        <p className="mt-3 max-w-2xl text-body-md text-subtle">
+        <p className="mt-3 max-w-2xl text-body-md text-white/70">
           {origin.description}
         </p>
 
         <dl className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          <Fact label="Owning team" value={origin.team} />
+          <Fact label="Owning team" value={origin.team} dark />
           <Fact
             label="On call"
             value={origin.onCall ?? "Unassigned"}
-            hint={origin.onCallEmail ?? undefined}
+            hint={origin.onCallEmail ?? undefined} dark
           />
           <Fact
             label="Datastores"
-            value={origin.datastores.length > 0 ? origin.datastores.join(", ") : "None"}
+            value={origin.datastores.length > 0 ? origin.datastores.join(", ") : "None"} dark
           />
-          <Fact label="Past incidents" value={String(origin.pastIncidents)} />
+          <Fact label="Past incidents" value={String(origin.pastIncidents)} dark />
         </dl>
       </section>
 
@@ -91,7 +91,7 @@ export async function BlastRadius({
 
           <section>
             <div className="flex flex-wrap items-baseline justify-between gap-4">
-              <h2 className="text-heading-md font-bold">Impact graph</h2>
+            <h2 className="text-heading-md font-semibold">Impact graph</h2>
               <Legend />
             </div>
             <div className="mt-6">
@@ -100,8 +100,8 @@ export async function BlastRadius({
           </section>
 
           <section>
-            <h2 className="text-heading-md font-bold">Who to page</h2>
-            <div className="mt-6 overflow-x-auto rounded-soft border border-hairline bg-surface shadow-ambient">
+            <h2 className="text-heading-md font-semibold">Who to page</h2>
+            <div className="mt-6 overflow-x-auto rounded-soft border border-hairline bg-surface">
               <table className="w-full border-collapse text-body-md">
                 <thead>
                   <tr className="border-b border-hairline text-left text-caption-sm text-subtle">
@@ -169,16 +169,18 @@ function Fact({
   label,
   value,
   hint,
+  dark = false,
 }: {
   label: string;
   value: string;
   hint?: string;
+  dark?: boolean;
 }) {
   return (
     <div>
-      <dt className="text-caption-sm text-subtle">{label}</dt>
-      <dd className="mt-1 text-body-md font-medium text-ink">{value}</dd>
-      {hint ? <dd className="text-caption-sm text-subtle">{hint}</dd> : null}
+      <dt className={`text-caption-sm ${dark ? "text-white/55" : "text-subtle"}`}>{label}</dt>
+      <dd className={`mt-1 text-body-md font-medium ${dark ? "text-white" : "text-ink"}`}>{value}</dd>
+      {hint ? <dd className={`text-caption-sm ${dark ? "text-white/55" : "text-subtle"}`}>{hint}</dd> : null}
     </div>
   );
 }
@@ -200,7 +202,7 @@ function Stat({
         : "text-ink";
 
   return (
-    <div className="rounded-soft border border-hairline bg-surface p-6 shadow-ambient">
+    <div className="rounded-soft border border-hairline bg-surface p-6">
       <p className="text-caption-sm text-subtle">{label}</p>
       <p className={`mt-4 text-display-sm font-bold tabular-nums ${colour}`}>
         {value}

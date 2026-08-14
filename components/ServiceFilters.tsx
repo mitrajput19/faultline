@@ -29,7 +29,7 @@ export function ServiceFilters({
         {tier ? <input type="hidden" name="tier" value={tier} /> : null}
         <label
           htmlFor="service-search"
-          className="block text-caption-sm font-medium text-subtle"
+          className="block text-caption-sm font-semibold text-ink"
         >
           Search
         </label>
@@ -39,7 +39,7 @@ export function ServiceFilters({
           name="q"
           defaultValue={search}
           placeholder="Service name"
-          className="mt-2 h-11 w-full rounded-soft border border-hairline bg-surface px-4 text-body-md text-ink placeholder:text-subtle"
+          className="mt-2 h-11 w-full rounded-full border border-hairline bg-surface px-5 text-body-md text-ink placeholder:text-subtle focus:border-accent focus:outline-none"
         />
       </form>
 
@@ -51,7 +51,7 @@ export function ServiceFilters({
               key={option.label}
               href={tierHref(search, option.value)}
               aria-current={active ? "true" : undefined}
-              className={`rounded-soft border px-4 py-2.5 text-caption-sm font-medium transition-colors ${
+              className={`rounded-full border px-4 py-2.5 text-caption-sm font-medium transition-colors ${
                 active
                   ? "border-accent bg-accent text-on-accent"
                   : "border-hairline bg-surface text-subtle hover:border-accent hover:text-ink"
