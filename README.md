@@ -4,8 +4,8 @@ Dependency blast-radius for incident response, backed by [CognoDB](https://conso
 
 When a service starts failing, the first two questions in the incident channel are always the same: **what else is going to break, and who do I need to page?** Faultline answers both from a single graph traversal.
 
-- **Live demo:** _add your deployment URL_
-- **Screen recording:** _add your recording link_
+- **Live demo:** [Faultline](https://faultline-lemon.vercel.app/)
+- **Screen recording:** [Google Drive Link](https://drive.google.com/drive/folders/1Dsi3oN3cTXQ1UO1k4Q1rwRwj76QUUp_O?usp=sharing)
 
 ---
 
@@ -85,79 +85,12 @@ MATCH path = (impacted:Service)-[:DEPENDS_ON*1..4]->(origin:Service {id: $id})
 
 All Cypher lives in [`lib/queries`](lib/queries). Every value is passed as a `$parameter`; no query is built by string concatenation.
 
-### 1. Blast radius — multi-hop, and awkward in SQL
-
-[`lib/queries/blastRadius.ts`](lib/queries/blastRadius.ts)
-
-```cypher
-MATCH path = (impacted:Service)-[:DEPENDS_ON*1..4]->(origin:Service {id: $id})
-WHERE length(path) <= $depth AND impacted <> origin
-WITH impacted,
-     min(length(path)) AS hops,
-     collect(path)     AS paths
-WITH impacted, hops,
-     any(p IN paths
-         WHERE all(edge IN relationships(p) WHERE edge.criticality = 'hard')) AS certain
-MATCH (impacted)-[:OWNED_BY]->(team:Team)
-OPTIONAL MATCH (team)-[membership:HAS_MEMBER]->(engineer:Engineer)
-  WHERE membership.role = 'on-call'
-RETURN impacted.id AS id, impacted.name AS name, impacted.tier AS tier,
-       hops, certain, team.name AS team,
-       engineer.name AS onCall, engineer.email AS onCallEmail
-ORDER BY certain DESC, hops, impacted.tier, impacted.name
-```
-
-Line by line:
-
-- The variable-length pattern `*1..4` walks one to four dependency hops backwards from the origin. Cypher requires **literal** bounds on that range, so the pattern is fixed at the widest depth the UI offers and the user's chosen depth is applied as a parameterised `length(path) <= $depth` filter. That keeps the query parameterised without concatenating the bound into the string.
-- `min(length(path))` collapses the many routes that may exist between two services into the shortest one, which is the number the UI reports as distance.
-- `any(... all(...))` is the grading step: a service is a certain outage if _at least one_ of its routes to the origin is hard on _every_ edge. This predicate spans a whole path and is the part a relational engine handles worst.
-- The final `MATCH`/`OPTIONAL MATCH` continue the same traversal onto ownership, so impact and paging information come back in one round trip. `OPTIONAL` is used because a team may temporarily have no on-call, and that should render as "Unassigned" rather than dropping the affected service from the results.
-- The on-call filter is written as an explicit `WHERE membership.role = 'on-call'` rather than the shorter inline form `-[:HAS_MEMBER {role: 'on-call'}]->`. On the instance this was built against, the inline property map was not applied inside `OPTIONAL MATCH`: every team member came back instead of only the on-call, which multiplied each impacted service into one row per member. The `WHERE` form filters correctly and is what the query uses throughout.
-
-### 2. Dependency edges inside the radius
-
-Returns only the edges whose endpoints are both already on screen, so the visualisation draws the real dependency structure rather than a star around the origin.
-
-```cypher
-MATCH (source:Service)-[edge:DEPENDS_ON]->(target:Service)
-WHERE source.id IN $ids AND target.id IN $ids
-RETURN source.id AS source, target.id AS target, edge.criticality AS criticality
-```
-
-### 3. Service catalogue
+### 1. Service catalogue
 
 [`lib/queries/services.ts`](lib/queries/services.ts) — search and tier filter, with a count of open incidents per service. Both filters are parameterised and made optional inside the query (`$search = '' OR ...`), so one statement serves every combination of filters instead of four assembled variants.
 
-### 4. Service overview
 
-Resolves a service's team, current on-call, datastores and incident history in a single statement.
-
----
-
-## Running it
-
-### 1. Create a CognoDB instance
-
-1. Sign up at [console.cognodb.com/signup](https://console.cognodb.com/signup) — the free tier needs no card.
-2. Create a free `c0` instance and pick a region.
-3. Copy the connection URI (`bolt+s://<instance-id>.databases.cognodb.cloud`) and the generated password for the user `cognodb`. **The password is shown once.**
-
-### 2. Configure
-
-```bash
-cp .env.example .env
-```
-
-```dotenv
-COGNODB_URI=bolt+s://<instance-id>.databases.cognodb.cloud
-COGNODB_USER=cognodb
-COGNODB_PASSWORD=<your password>
-```
-
-`.env` is git-ignored. No credential is committed to this repository, and the application reads all three values from the environment at runtime.
-
-### 3. Install and seed
+### 2. Install and seed
 
 ```bash
 npm install
@@ -219,11 +152,10 @@ Runtime dependencies are `next`, `react`, `react-dom` and `neo4j-driver`. There 
 
 ## Screenshots
 
-_Add screenshots of the catalogue and blast-radius views here._
 ![alt text](image.png)
 
-![alt text](image-1.png)
+![alt text](image-4.png)
 
-![alt text](image-2.png)
+![alt text](image-1.png)
 
 ![alt text](image-3.png)
