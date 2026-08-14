@@ -80,7 +80,7 @@ export function ImpactGraph({
   );
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-line bg-surface/50">
+    <div className="overflow-x-auto rounded-soft border border-hairline bg-surface shadow-ambient">
       <svg
         role="img"
         aria-label={`Dependency impact graph for ${origin.name}`}
@@ -99,11 +99,11 @@ export function ImpactGraph({
             markerHeight="6"
             orient="auto"
           >
-            <path d="M0,0 L8,4 L0,8 Z" fill="var(--color-line)" />
+            <path d="M0,0 L8,4 L0,8 Z" fill="var(--hairline)" />
           </marker>
         </defs>
 
-        <text x={PADDING} y={PADDING} className="fill-muted text-[11px] uppercase">
+        <text x={PADDING} y={PADDING} className="fill-subtle text-[12px]">
           Origin
         </text>
         {columns.map((_, index) => (
@@ -111,7 +111,7 @@ export function ImpactGraph({
             key={index}
             x={PADDING + (index + 1) * COLUMN_STEP}
             y={PADDING}
-            className="fill-muted text-[11px] uppercase"
+            className="fill-subtle text-[12px]"
           >
             {index + 1} hop{index > 0 ? "s" : ""}
           </text>
@@ -120,20 +120,28 @@ export function ImpactGraph({
         {drawable.map((edge) => {
           const from = placed.get(edge.source)!;
           const to = placed.get(edge.target)!;
-          const startX = from.x;
+
+          // Hop distance is the shortest path, so a service can still depend on
+          // one further from the origin than itself. Attach the line to whichever
+          // sides face each other rather than assuming the source sits on the
+          // right, which keeps those edges from looping around the diagram.
+          const rightward = from.x <= to.x;
+          const startX = rightward ? from.x + NODE_WIDTH : from.x;
+          const endX = rightward ? to.x : to.x + NODE_WIDTH;
+          const bend = rightward ? 50 : -50;
           const startY = from.y + NODE_HEIGHT / 2;
-          const endX = to.x + NODE_WIDTH;
           const endY = to.y + NODE_HEIGHT / 2;
 
           return (
             <path
               key={`${edge.source}-${edge.target}`}
-              d={`M ${startX} ${startY} C ${startX - 50} ${startY}, ${endX + 50} ${endY}, ${endX} ${endY}`}
+              d={`M ${startX} ${startY} C ${startX + bend} ${startY}, ${endX - bend} ${endY}, ${endX} ${endY}`}
               fill="none"
-              stroke="var(--color-line)"
+              stroke="var(--hairline)"
               strokeWidth={edge.criticality === "hard" ? 1.6 : 1}
               strokeDasharray={edge.criticality === "hard" ? undefined : "4 4"}
               markerEnd="url(#arrow)"
+              opacity={rightward ? 0.55 : 1}
             />
           );
         })}
@@ -146,19 +154,21 @@ export function ImpactGraph({
               y={node.y}
               width={NODE_WIDTH}
               height={NODE_HEIGHT}
-              rx={8}
+              rx={4}
               className={
                 node.tone === "origin"
-                  ? "fill-accent/15 stroke-accent"
+                  ? "fill-accent stroke-accent"
                   : node.tone === "certain"
-                    ? "fill-critical/10 stroke-critical/60"
-                    : "fill-raised stroke-line"
+                    ? "fill-surface stroke-critical"
+                    : "fill-surface stroke-hairline"
               }
             />
             <text
               x={node.x + 12}
               y={node.y + NODE_HEIGHT / 2 + 4}
-              className="fill-ink text-[12px]"
+              className={`text-[13px] ${
+                node.tone === "origin" ? "fill-on-accent" : "fill-ink"
+              }`}
             >
               {node.name.length > 22 ? `${node.name.slice(0, 21)}…` : node.name}
             </text>
@@ -171,7 +181,7 @@ export function ImpactGraph({
               key={`overflow-${index}`}
               x={PADDING + (index + 1) * COLUMN_STEP}
               y={centreY + (Math.min(column.length, MAX_PER_COLUMN) * ROW_STEP) / 2 + 16}
-              className="fill-muted text-[11px]"
+              className="fill-subtle text-[12px]"
             >
               +{column.length - MAX_PER_COLUMN} more
             </text>

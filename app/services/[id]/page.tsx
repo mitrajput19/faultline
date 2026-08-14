@@ -22,29 +22,33 @@ export default async function ServicePage({
     requested >= 1 && requested <= MAX_DEPTH ? Math.floor(requested) : 2;
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <Link href="/" className="text-sm text-muted hover:text-ink">
-          ← All services
+    <div className="space-y-12">
+      <div className="flex flex-wrap items-center justify-between gap-6">
+        <Link
+          href="/"
+          className="rounded-sharp text-caption-sm text-subtle underline decoration-hairline underline-offset-4 hover:text-ink hover:decoration-accent"
+        >
+          All services
         </Link>
 
-        <div className="flex items-center gap-2">
-          <span className="text-xs uppercase tracking-wide text-muted">
-            Depth
-          </span>
-          {DEPTH_OPTIONS.map((option) => (
-            <Link
-              key={option}
-              href={`/services/${id}?depth=${option}`}
-              className={`rounded-lg border px-2.5 py-1 text-sm transition-colors ${
-                option === activeDepth
-                  ? "border-accent/50 bg-accent/10 text-accent"
-                  : "border-line bg-surface text-muted hover:text-ink"
-              }`}
-            >
-              {option}
-            </Link>
-          ))}
+        <div className="flex items-center gap-3">
+          <span className="text-caption-sm text-subtle">Depth</span>
+          <div className="flex gap-2">
+            {DEPTH_OPTIONS.map((option) => (
+              <Link
+                key={option}
+                href={`/services/${id}?depth=${option}`}
+                aria-current={option === activeDepth ? "true" : undefined}
+                className={`flex h-11 w-11 items-center justify-center rounded-soft border text-caption-sm font-medium transition-colors ${
+                  option === activeDepth
+                    ? "border-accent bg-accent text-on-accent"
+                    : "border-hairline bg-surface text-subtle hover:border-accent hover:text-ink"
+                }`}
+              >
+                {option}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 

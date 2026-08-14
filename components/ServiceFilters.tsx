@@ -23,17 +23,23 @@ export function ServiceFilters({
   tier: number | null;
 }) {
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
       {/* A plain GET form keeps search in the URL and working without JavaScript. */}
-      <form action="/" className="w-full sm:max-w-xs">
+      <form action="/" className="w-full md:max-w-sm">
         {tier ? <input type="hidden" name="tier" value={tier} /> : null}
+        <label
+          htmlFor="service-search"
+          className="block text-caption-sm font-medium text-subtle"
+        >
+          Search
+        </label>
         <input
+          id="service-search"
           type="search"
           name="q"
           defaultValue={search}
-          placeholder="Search services"
-          aria-label="Search services"
-          className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none"
+          placeholder="Service name"
+          className="mt-2 h-11 w-full rounded-soft border border-hairline bg-surface px-4 text-body-md text-ink placeholder:text-subtle"
         />
       </form>
 
@@ -44,10 +50,11 @@ export function ServiceFilters({
             <Link
               key={option.label}
               href={tierHref(search, option.value)}
-              className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
+              aria-current={active ? "true" : undefined}
+              className={`rounded-soft border px-4 py-2.5 text-caption-sm font-medium transition-colors ${
                 active
-                  ? "border-accent/50 bg-accent/10 text-accent"
-                  : "border-line bg-surface text-muted hover:text-ink"
+                  ? "border-accent bg-accent text-on-accent"
+                  : "border-hairline bg-surface text-subtle hover:border-accent hover:text-ink"
               }`}
             >
               {option.label}

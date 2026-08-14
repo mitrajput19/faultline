@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
+// Variable font: one file covers the 400/500/700 weights the design system uses.
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
@@ -18,26 +19,25 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.className}>
       <body className="min-h-screen">
-        <header className="border-b border-line">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-            <Link href="/" className="flex items-center gap-3">
-              <span
-                aria-hidden
-                className="block h-5 w-px rotate-12 bg-critical shadow-[0_0_12px] shadow-critical/60"
-              />
-              <span className="text-lg font-semibold tracking-tight">
-                Faultline
-              </span>
+        <header className="border-b border-hairline bg-surface">
+          <div className="mx-auto flex max-w-7xl items-baseline justify-between gap-6 px-4 py-6 sm:px-6">
+            <Link
+              href="/"
+              className="text-heading-md font-bold text-ink rounded-sharp"
+            >
+              Faultline
             </Link>
-            <p className="hidden text-sm text-muted sm:block">
+            <p className="hidden text-caption-sm text-subtle sm:block">
               Dependency blast-radius for incident response
             </p>
           </div>
         </header>
 
-        <main className="mx-auto max-w-6xl px-6 py-10">{children}</main>
+        <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
+          {children}
+        </main>
 
-        <footer className="mx-auto max-w-6xl px-6 pb-10 text-xs text-muted">
+        <footer className="mx-auto max-w-7xl px-4 pb-12 text-caption-sm text-subtle sm:px-6">
           Graph data served from CognoDB over Bolt.
         </footer>
       </body>

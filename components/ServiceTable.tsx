@@ -33,10 +33,10 @@ export async function ServiceTable({
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-line">
-      <table className="w-full border-collapse text-sm">
+    <div className="overflow-x-auto rounded-soft border border-hairline bg-surface shadow-ambient">
+      <table className="w-full border-collapse text-body-md">
         <thead>
-          <tr className="bg-surface text-left text-xs uppercase tracking-wide text-muted">
+          <tr className="border-b border-hairline text-left text-caption-sm text-subtle">
             <th className="px-4 py-3 font-medium">Service</th>
             <th className="px-4 py-3 font-medium">Tier</th>
             <th className="hidden px-4 py-3 font-medium sm:table-cell">Owner</th>
@@ -45,14 +45,11 @@ export async function ServiceTable({
         </thead>
         <tbody>
           {services.map((service) => (
-            <tr
-              key={service.id}
-              className="border-t border-line transition-colors hover:bg-surface/60"
-            >
+            <tr key={service.id} className="border-b border-hairline last:border-0">
               <td className="px-4 py-3">
                 <Link
                   href={`/services/${service.id}`}
-                  className="font-medium text-ink hover:text-accent"
+                  className="rounded-sharp font-medium text-ink underline decoration-hairline underline-offset-4 hover:decoration-accent"
                 >
                   {service.name}
                 </Link>
@@ -60,17 +57,17 @@ export async function ServiceTable({
               <td className="px-4 py-3">
                 <TierBadge tier={service.tier} />
               </td>
-              <td className="hidden px-4 py-3 text-muted sm:table-cell">
+              <td className="hidden px-4 py-3 text-caption-sm text-subtle sm:table-cell">
                 {service.team}
               </td>
-              <td className="px-4 py-3 text-right">
+              <td className="px-4 py-3 text-right text-caption-sm">
                 {service.activeIncidents > 0 ? (
-                  <span className="text-xs font-medium text-critical">
+                  <span className="font-medium text-critical">
                     {service.activeIncidents} active incident
                     {service.activeIncidents > 1 ? "s" : ""}
                   </span>
                 ) : (
-                  <span className="text-xs text-muted/70">Healthy</span>
+                  <span className="text-subtle">Healthy</span>
                 )}
               </td>
             </tr>

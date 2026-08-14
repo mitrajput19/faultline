@@ -16,10 +16,10 @@ export default async function HomePage({
   const activeTier = [1, 2, 3].includes(parsedTier) ? parsedTier : null;
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Service estate</h1>
-        <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted">
+    <div className="space-y-12">
+      <div className="max-w-2xl">
+        <h1 className="text-display-sm font-bold">Service estate</h1>
+        <p className="mt-3 text-body-md text-subtle">
           Every service Faultline knows about, with its owning team. Open a
           service to see what fails with it and who needs to be paged.
         </p>
